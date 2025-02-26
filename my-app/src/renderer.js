@@ -14,6 +14,7 @@ let search_bar = document.getElementById('search-bar')
 curr_tab_index = 0 // USE WITH TABS ARRAY
 curr_tab = null // HOLDS TAB OBJECT
 
+
 // _______________________________________________________________________________________________________________________
 
 // INIT TAB ARRAY AND MANUALLY CREATE EVENT LISTENER FOR THE FIRST TAB. 
@@ -33,6 +34,7 @@ class Tab{
 
 curr_tab_index = 0
 curr_tab = new Tab(tab_group.children[curr_tab_index], 0)
+tabs.push(curr_tab)
 
 // FIRST TAB NEEDS TO BE INITIALIZED BY ITSELF
 tabs[0].bttn.addEventListener('click', () => {
@@ -41,7 +43,7 @@ tabs[0].bttn.addEventListener('click', () => {
   // _______________________________________________________________________________________________________________________
   let next_src = ''
   if (tabs[0].bttn.textContent == "Mangrove"){
-    next_src = "file:///Users/royhouwayek/Documents/WorkSpaces/hackru2025/browser/my-app/src/front_page.html"
+    next_src = "front_page.html"
   }else{
     next_src = tabs[0].bttn.textContent
   }
@@ -118,7 +120,7 @@ new_tab_button.addEventListener('click', function() {
 
       let next_src = ''
       if (tab.bttn.textContent == "Mangrove"){
-        next_src = "file:///Users/royhouwayek/Documents/WorkSpaces/hackru2025/browser/my-app/src/front_page.html"
+        next_src = "front_page.html"
       }else{
         next_src = tab.bttn.textContent
       }
@@ -155,9 +157,9 @@ new_tab_button.addEventListener('click', function() {
   curr_tab = tabs[newTab.index]
 
   // GOES BACK TO HOME PAGE (front_page.html)
-  if (webview.getAttribute("src") != "file:///Users/royhouwayek/Documents/WorkSpaces/hackru2025/browser/my-app/src/front_page.html"){
+  if (webview.getAttribute("src") != "front_page.html"){
     setTimeout(() => {
-      webview.setAttribute("src", "file:///Users/royhouwayek/Documents/WorkSpaces/hackru2025/browser/my-app/src/front_page.html");
+      webview.setAttribute("src", "front_page.html");
     }, 50); 
     search_bar.value = "Mangrove"
   }
