@@ -23,12 +23,12 @@ curr_tab = null // HOLDS TAB OBJECT
 // TAB ARRAY WHICH HOLDS ALL ATABS
 let tabs = []
 
-class Tab{
-  constructor(bttn, index){
-      // HOLDS HTML BUTTON AND INDEX IN ARRAY. 
-      // YEAH I SEE PROBLEMS WITH THIS SETUP IN THE FUTURE. IT WORKS FOR NOW
-      this.bttn = bttn;
-      this.index = index;
+class Tab {
+  constructor(bttn, index) {
+    // HOLDS HTML BUTTON AND INDEX IN ARRAY. 
+    // YEAH I SEE PROBLEMS WITH THIS SETUP IN THE FUTURE. IT WORKS FOR NOW
+    this.bttn = bttn;
+    this.index = index;
   }
 }
 
@@ -42,20 +42,20 @@ tabs[0].bttn.addEventListener('click', () => {
   // ALSO SINCE THE HOMEPAGE ISNT AN ACTUAL URL I JUST SET URL TO SAY MANGROVE FOR IT
   // _______________________________________________________________________________________________________________________
   let next_src = ''
-  if (tabs[0].bttn.textContent == "Mangrove"){
+  if (tabs[0].bttn.textContent == "Graphene") {
     next_src = "front_page.html"
-  }else{
+  } else {
     next_src = tabs[0].bttn.textContent
   }
 
   curr_src = webview.getAttribute("src")
 
-  if (curr_src != next_src){
+  if (curr_src != next_src) {
     // YOU GET ERROR IF YOU CHANGE URL INSTANTLY SO I ADDED SOME DELAY
     setTimeout(() => {
       webview.setAttribute("src", next_src);
     }, 50);  // Delay of 500 milliseconds (0.5 seconds)
-    search_bar.value = "Mangrove"
+    search_bar.value = "Graphene"
   }
   // _______________________________________________________________________________________________________________________
 
@@ -77,7 +77,7 @@ webview.addEventListener('ipc-message', event => {
   console.log("got this from front page: ", event.channel)
   // THIS FUNCTION IS EXPOSED IN PRELOAD.JS
   // ADDS MESSAGE IN FRONT TO HELP BACKEND PARSE
-  window.electron.sendUrl("front page:"+event.channel)
+  window.electron.sendUrl("front page:" + event.channel)
 })
 
 // SEARCH FROM MANGROVE HOME PAGE (front_page.html) BUT GIVEN TO US FROM MAIN
@@ -86,23 +86,23 @@ window.electron.receive('home-search', (data) => {
   console.log('URL from Main:', data);
   setTimeout(() => {
     webview.setAttribute("src", data);
-  }, 50); 
+  }, 50);
   search_bar.value = data
-  curr_tab.bttn.textContent = data 
+  curr_tab.bttn.textContent = data
 });
 // ________________________________________________________________________________________________________________
 
 // THIS LETS THE ADD TAB BUTTON WORK. 
 // IT ATTACHES ITS LISTENER AND ATTACHES THE LISTENERS FOR ALL THE TABS IT MAKES.  
 // ________________________________________________________________________________________________________________
-new_tab_button.addEventListener('click', function() {
+new_tab_button.addEventListener('click', function () {
 
   // MAKES THE NEW TAB (WHICH IS SECRETELY AN HTML BUTTON) 
   newTab = new Tab(document.createElement('button'), tabs.length);
   tabs.push(newTab)
 
   newTab.bttn.id = "tab"
-  
+
   // ADDS THE TAB TO ITS HTML CONTAINER (TAB GROUP)
   // THE ADD TAB BUTTON ITSELF IS ACTUALLY THE LAST CHILD SO I REMOVE IT TEMPORARILY, ADD THE TAB, THEN PUT THE BUTTON BACK.
   let lastChild = tab_group.children[tab_group.children.length - 1];
@@ -115,25 +115,25 @@ new_tab_button.addEventListener('click', function() {
   // IT CAPTURES THE CONTEXT OF THE CURRENT TAB, NOT JUST THE NEWEST TAB. 
   // THATS WHY WE RETURN A FUNCTION AND NOT JUST ATTACH IT DIRECTLY
   // ________________________________________________________________________________________________________________
-  newTab.bttn.addEventListener('click', (function(tab) {
-    return function() {
+  newTab.bttn.addEventListener('click', (function (tab) {
+    return function () {
 
       let next_src = ''
-      if (tab.bttn.textContent == "Mangrove"){
+      if (tab.bttn.textContent == "Graphene") {
         next_src = "front_page.html"
-      }else{
+      } else {
         next_src = tab.bttn.textContent
       }
-    
+
       curr_src = webview.getAttribute("src")
-    
-      if (curr_src != next_src){
+
+      if (curr_src != next_src) {
         setTimeout(() => {
           webview.setAttribute("src", next_src);
         }, 50);  // Delay of 500 milliseconds (0.5 seconds)
-        search_bar.value = "Mangrove"
+        search_bar.value = "Graphene"
       }
-    
+
       curr_tab_index = tab.index
       curr_tab = tabs[tab.index]
     };
@@ -143,11 +143,11 @@ new_tab_button.addEventListener('click', function() {
   // WE ARE BACK FOR ADD TAB BUTTON EVENT HANDLER
   // ________________________________________________________________________________________________________________
   // MAKES A NICE MODERN TRANSITION AND SETS THE NEW TAB TEXT
-  newTab.bttn.textContent = 'Mangrove';
+  newTab.bttn.textContent = 'Graphene';
   newTab.bttn.style.opacity = 0;
   newTab.bttn.style.transition = 'opacity 1s ease';
 
-  setTimeout(function() {
+  setTimeout(function () {
     // Trigger the animation
     newTab.bttn.style.opacity = 1;
   }, 0);  // This ensures the initial styles are applied first
@@ -157,13 +157,13 @@ new_tab_button.addEventListener('click', function() {
   curr_tab = tabs[newTab.index]
 
   // GOES BACK TO HOME PAGE (front_page.html)
-  if (webview.getAttribute("src") != "front_page.html"){
+  if (webview.getAttribute("src") != "front_page.html") {
     setTimeout(() => {
       webview.setAttribute("src", "front_page.html");
-    }, 50); 
-    search_bar.value = "Mangrove"
+    }, 50);
+    search_bar.value = "Graphene"
   }
-// ________________________________________________________________________________________________________________
+  // ________________________________________________________________________________________________________________
 
 });
 
@@ -171,19 +171,19 @@ new_tab_button.addEventListener('click', function() {
 // ________________________________________________________________________________________________________________
 search_bar.addEventListener('keydown', (event) => {
   if (event.key === "Enter") {
-      const inputValue = event.target.value;
-      curr_tab.bttn.textContent = inputValue
-      // SENDS URL BACK TO MAIN (INDEX.js)
-      window.electron.sendUrl("search bar:"+inputValue)
-    }
+    const inputValue = event.target.value;
+    curr_tab.bttn.textContent = inputValue
+    // SENDS URL BACK TO MAIN (INDEX.js)
+    window.electron.sendUrl("search bar:" + inputValue)
+  }
 });
 
 // GETS INFO BACK FROM MAIN AND SETS WEBVEIW
 window.electron.receive('bar-search', (data) => {
   search_bar.value = data
-  curr_tab.bttn.textContent = data 
+  curr_tab.bttn.textContent = data
   setTimeout(() => {
     webview.setAttribute("src", data);
-  }, 50); 
+  }, 50);
 });
 // ________________________________________________________________________________________________________________
